@@ -1,4 +1,8 @@
+using DevExpress.Xpf.Editors.Helpers;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Ioc;
+using OpsMenu.Data;
+using System.Linq;
 
 namespace OpsMenu.ViewModel
 {
@@ -40,6 +44,8 @@ namespace OpsMenu.ViewModel
                 Set(() => OpsApplications, ref _opsApplications, value);
             }
         }
+
+        public IOpsDataService OpsLinksData { get; }
         #endregion
 
         /// <summary>
@@ -53,21 +59,38 @@ namespace OpsMenu.ViewModel
                 // Code runs in Blend --> create design time data.
                 
 
-                this.OpsApplications.Apps.Add(new AppViewModel(){App="PowerBI", Path = @"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe" });
-                this.OpsApplications.Apps.Add(new AppViewModel(){App = "Test File" , Path = @"C:\Users\mvaysman\Desktop\test.txt" });
-                this.OpsApplications.Apps.Add(new AppViewModel(){App = "New Hire Pdf", Path = @"C:\Users\mvaysman\Desktop\New Hire Insider Trading Aptitude Examination.pdf" });
-                this.OpsApplications.Apps.Add(new AppViewModel(){App = "Dell Display Manager", Path = @"C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe" });
-                this.OpsApplications.Apps.Add(new AppViewModel(){App = "GeForce Experience", Path = @"C:\Program Files(x86)\NVIDIA Corporation\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe" });
+                this.OpsApplications.Apps.Add(new AppViewModel("PowerBI",@"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe" ));
+                this.OpsApplications.Apps.Add(new AppViewModel("Test File",@"C:\Users\mvaysman\Desktop\test.txt" ));
+                this.OpsApplications.Apps.Add(new AppViewModel("New Hire Pdf", @"C:\Users\mvaysman\Desktop\New Hire Insider Trading Aptitude Examination.pdf"));
+                this.OpsApplications.Apps.Add(new AppViewModel("Dell Display Manager", @"C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"));
+                this.OpsApplications.Apps.Add(new AppViewModel("GeForce Experience", @"C:\Program Files(x86)\NVIDIA Corporation\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe" ));
             }
             else
             {
                 // Code runs "for real"
-                this.OpsApplications.Apps.Add(new AppViewModel() { App = "PowerBI", Path = @"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe" });
-                this.OpsApplications.Apps.Add(new AppViewModel() { App = "Test File", Path = @"C:\Users\mvaysman\Desktop\test.txt" });
-                this.OpsApplications.Apps.Add(new AppViewModel() { App = "New Hire Pdf", Path = @"C:\Users\mvaysman\Desktop\New Hire Insider Trading Aptitude Examination.pdf" });
-                this.OpsApplications.Apps.Add(new AppViewModel() { App = "Dell Display Manager", Path = @"C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe" });
-                this.OpsApplications.Apps.Add(new AppViewModel() { App = "GeForce Experience", Path = @"C:\Program Files(x86)\NVIDIA Corporation\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe" });
+
+
+                this.OpsApplications.Apps.Add(new AppViewModel("PowerBI", @"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"));
+                this.OpsApplications.Apps.Add(new AppViewModel("Test File", @"C:\Users\mvaysman\Desktop\test.txt"));
+                this.OpsApplications.Apps.Add(new AppViewModel("New Hire Pdf", @"C:\Users\mvaysman\Desktop\New Hire Insider Trading Aptitude Examination.pdf"));
+                this.OpsApplications.Apps.Add(new AppViewModel("Dell Display Manager", @"C:\Program Files (x86)\Dell\Dell Display Manager\ddm.exe"));
+                this.OpsApplications.Apps.Add(new AppViewModel("GeForce Experience", @"C:\Program Files(x86)\NVIDIA Corporation\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"));
             }
+        }
+
+        [PreferredConstructor]
+        public MainViewModel(IOpsDataService opsLinksData)
+        {
+            this.OpsApplications = new AppsViewModel();
+            this.OpsLinksData = opsLinksData;
+
+            this.OpsLinksData.OpsApplicationLinks
+                .ToList()
+                .ForEach(i=>
+                    this.OpsApplications.Apps.Add(
+                new AppViewModel(i.AppName,i.PathToApplication))
+                );
+
         }
     }
 }

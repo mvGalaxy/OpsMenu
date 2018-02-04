@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
 
 namespace OpsMenu
@@ -61,6 +63,31 @@ namespace OpsMenu
         }
         #endregion
 
+        #region AssociatedImage
+        /// <summary>
+        /// The <see cref="AssociatedImage" /> property's name.
+        /// </summary>
+        public const string AssociatedImagePropertyName = "AssociatedImage";
+
+        private ImageSource _associatedImage;
+
+        /// <summary>
+        /// Sets and gets the AssociatedImage property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public ImageSource AssociatedImage
+        {
+            get
+            {
+                return _associatedImage;
+            }
+            set
+            {
+                Set(() => AssociatedImage, ref _associatedImage, value);
+            }
+        }
+        #endregion
+
         private RelayCommand _executePathCommand;
 
         public RelayCommand ExecutePathCommand
@@ -71,7 +98,36 @@ namespace OpsMenu
 
         public AppViewModel()
         {
-            ExecutePathCommand=new RelayCommand(()=>Process.Start(Path),()=>true);
+            ExecutePathCommand=new RelayCommand(()=>ExecutePath(Path),()=>true);
+        }
+
+        private void ExecutePath(string path)
+        {
+            try
+            {
+                Process.Start(Path);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Unable to Open {path}");
+            }
+            
+        }
+
+        public AppViewModel(string app, string path):this()
+        {
+            this.App = app;
+            this.Path = path;
+
+            try
+            {
+                this.AssociatedImage = Helpers.ProjectHelpers.GetIcon(this.Path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                
+            }
         }
     }
 }

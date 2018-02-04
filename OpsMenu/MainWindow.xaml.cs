@@ -39,6 +39,21 @@ namespace OpsMenu
             }
         }
 
-   
+
+        private void UIElement_OnGotMouseCapture(object sender, MouseEventArgs e)
+        {
+            var ee = e;
+        }
+
+        private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            var ee = e;
+        }
+
+        private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            var ee = e;
+        }
+
     }
 }

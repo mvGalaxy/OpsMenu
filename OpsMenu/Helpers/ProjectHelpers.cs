@@ -36,6 +36,15 @@ namespace OpsMenu.Helpers
 
                 return wpfBitmap;
             }
-        
+
+        public static ImageSource GetIcon(this string fileName)
+        {
+            Icon icon = Icon.ExtractAssociatedIcon(fileName);
+            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                icon.Handle,
+                new System.Windows.Int32Rect(0,0,icon.Width, icon.Height),
+                BitmapSizeOptions.FromEmptyOptions());
+        }
+
     }
 }

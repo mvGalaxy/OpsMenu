@@ -6,10 +6,13 @@
         xmlns:local="clr-namespace:OpsMenu"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Class="OpsMenu.MainWindow"
+ 
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        Title="OpsLinks" Height="350" Width="450"
+        ResizeMode="NoResize"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-    SizeToContent="Width"
+        SizeToContent="Width"
+    dx:ThemeManager.ThemeName="VS2010"
     >
     <Window.Resources>
         <DataTemplate x:Key="PathCellTemplate" >
@@ -22,16 +25,37 @@
             </TextBlock>
           </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="fileIconsTemplate">
+   <Viewbox MaxWidth="15" MaxHeight="15">
+       <Image Source="{Binding Path= Value}" Margin="1" SnapsToDevicePixels="True" ></Image>
+   </Viewbox>
+
+        </DataTemplate>
+        <DataTemplate x:Key="AppTemplate">
+            <TextBlock>
+            <Hyperlink Command="{Binding Path=RowData.Row.ExecutePathCommand}">
+            <TextBlock Text="{Binding Path=Value}" MouseEnter="UIElement_OnMouseEnter" ToolTip="{Binding Path= RowData.Row.Path}" ></TextBlock>
+            </Hyperlink>
+            </TextBlock>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
-     
-        <dxg:GridControl   ItemsSource="{Binding OpsApplications.Apps}" SelectedItem="{Binding OpsApplications.SelectedApp}" AutoGenerateColumns="None"  EnableSmartColumnsGeneration="false" HorizontalAlignment="Left"  VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <dxg:GridControl   Grid.Row="0" Grid.Column="0" ItemsSource="{Binding OpsApplications.Apps}" SelectedItem="{Binding OpsApplications.SelectedApp}" AutoGenerateColumns="None"  EnableSmartColumnsGeneration="false" >
+            
             <dxg:GridControl.View>
-                <dxg:TableView BestFitMode="AllRows" AllowPerPixelScrolling="True" ShowTotalSummary="True"/>
+                
+               <dxg:TableView AllowColumnMoving="False" ShowGroupPanel="False" AllowPerPixelScrolling="True" ShowTotalSummary="True" BestFitMode="AllRows" AutoWidth="False" ShowAutoFilterRow="True"/>
             </dxg:GridControl.View>
             <dxg:GridControl.Columns>
-                <dxg:GridColumn FieldName="App" Header="NameOfApp"></dxg:GridColumn>
-                <dxg:GridColumn FieldName="Path" Header="PathOfApp"  AllowSorting="true" AllowEditing="false"  CellTemplate="{StaticResource PathCellTemplate}"></dxg:GridColumn>
+                <dxg:GridColumn FieldName="AssociatedImage" Header=""  MaxWidth="15"  HorizontalHeaderContentAlignment="Left" CellTemplate="{StaticResource fileIconsTemplate}"></dxg:GridColumn>
+                <dxg:GridColumn FieldName="App" Header="NameOfApp" CellTemplate="{StaticResource AppTemplate}"></dxg:GridColumn>
+                <dxg:GridColumn FieldName="Path" Visible="False" Header="PathOfApp"   CellTemplate="{StaticResource PathCellTemplate}"></dxg:GridColumn>
             </dxg:GridControl.Columns>
         </dxg:GridControl>
 

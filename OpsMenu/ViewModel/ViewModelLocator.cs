@@ -15,6 +15,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using OpsMenu.Data;
 
 namespace OpsMenu.ViewModel
 {
@@ -42,6 +43,7 @@ namespace OpsMenu.ViewModel
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
+            SimpleIoc.Default.Register<IOpsDataService, OpsLinksDataService>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
 
