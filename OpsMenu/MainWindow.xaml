@@ -1,0 +1,39 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpsMenu"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Class="OpsMenu.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+    SizeToContent="Width"
+    >
+    <Window.Resources>
+        <DataTemplate x:Key="PathCellTemplate" >
+          <StackPanel>
+            
+            <TextBlock >
+            <Hyperlink Click="Hyperlink_OnClick" NavigateUri="{Binding Path=Value}">
+                <TextBlock Text="{Binding Path=Value}" ></TextBlock>
+            </Hyperlink>           
+            </TextBlock>
+          </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+     
+        <dxg:GridControl   ItemsSource="{Binding OpsApplications.Apps}" SelectedItem="{Binding OpsApplications.SelectedApp}" AutoGenerateColumns="None"  EnableSmartColumnsGeneration="false" HorizontalAlignment="Left"  VerticalAlignment="Top">
+            <dxg:GridControl.View>
+                <dxg:TableView BestFitMode="AllRows" AllowPerPixelScrolling="True" ShowTotalSummary="True"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="App" Header="NameOfApp"></dxg:GridColumn>
+                <dxg:GridColumn FieldName="Path" Header="PathOfApp"  AllowSorting="true" AllowEditing="false"  CellTemplate="{StaticResource PathCellTemplate}"></dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+
+    </Grid>
+</Window>
